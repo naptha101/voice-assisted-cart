@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
+import { Mic, StopCircle, Trash2, Plus } from 'lucide-react'
 
 export default function Home() {
   const [status, setStatus] = useState('Press the mic and speak your command...')
@@ -9,7 +10,7 @@ export default function Home() {
   const [searchResults, setSearchResults] = useState([])
   const recognitionRef = useRef(null)
   const [listening, setListening] = useState(false)
-  const [activeTab, setActiveTab] = useState('list') // 'list', 'suggestions', 'search'
+  const [activeTab, setActiveTab] = useState('list')
 
   useEffect(() => {
     refreshShoppingList()
@@ -158,18 +159,20 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4 md:p-8 text-gray-800">
-      <div className="max-w-3xl mx-auto">
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-blue-600 mb-2">🛍️ Voice Shopping Assistant</h1>
-          <p className="text-lg text-gray-600">Speak naturally and let AI manage your shopping list</p>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-6 md:p-10 font-sans">
+      <div className="max-w-4xl mx-auto">
+        <header className="text-center mb-10 animate-fade-in">
+          <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 mb-3">
+            🛍️ Voice Shopping Assistant
+          </h1>
+          <p className="text-xl text-gray-600">Your AI-powered shopping companion</p>
         </header>
 
         {/* Voice Controls */}
-        <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
+        <div className="bg-white rounded-2xl shadow-xl p-8 mb-8 transform hover:scale-[1.02] transition-transform duration-300">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-6">
             <select
-              className="px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              className="w-full md:w-1/3 px-5 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-700 focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 transition-all duration-300"
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
             >
@@ -178,76 +181,73 @@ export default function Home() {
             </select>
             <button
               onClick={handleMicClick}
-              className={`flex items-center justify-center gap-2 px-6 py-3 rounded-lg text-white font-medium transition-all ${
-                listening ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-600 hover:bg-blue-700'
+              className={`w-full md:w-auto flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-white font-semibold text-lg transition-all duration-300 shadow-md ${
+                listening ? 'bg-red-500 hover:bg-red-600' : 'bg-indigo-600 hover:bg-indigo-700'
               }`}
             >
               {listening ? (
                 <>
-                  <span className="animate-pulse">🔴</span> Stop Listening
+                  <StopCircle className="w-6 h-6 animate-pulse" /> Stop Listening
                 </>
               ) : (
                 <>
-                  <span>🎤</span> Start Listening
+                  <Mic className="w-6 h-6" /> Start Listening
                 </>
               )}
             </button>
           </div>
-          <div className="text-center text-sm text-gray-600 p-3 bg-gray-50 rounded-lg">
+          <div className="text-center text-base text-gray-600 p-4 bg-gray-50 rounded-xl shadow-inner">
             {status}
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-gray-200 mb-6">
-          <button
-            className={`px-4 py-2 font-medium ${activeTab === 'list' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
-            onClick={() => setActiveTab('list')}
-          >
-            📝 Shopping List
-          </button>
-          <button
-            className={`px-4 py-2 font-medium ${activeTab === 'suggestions' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
-            onClick={() => setActiveTab('suggestions')}
-          >
-            💡 Suggestions
-          </button>
-          <button
-            className={`px-4 py-2 font-medium ${activeTab === 'search' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
-            onClick={() => setActiveTab('search')}
-          >
-            🔍 Search Results
-          </button>
+        <div className="flex border-b-2 border-gray-200 mb-8 space-x-2">
+          {['list', 'suggestions', 'search'].map((tab) => (
+            <button
+              key={tab}
+              className={`px-6 py-3 font-semibold text-lg rounded-t-lg transition-all duration-300 ${
+                activeTab === tab
+                  ? 'text-indigo-600 border-b-4 border-indigo-600 bg-indigo-50'
+                  : 'text-gray-500 hover:text-indigo-600 hover:bg-indigo-50'
+              }`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab === 'list' && '📝 Shopping List'}
+              {tab === 'suggestions' && '💡 Suggestions'}
+              {tab === 'search' && '🔍 Search Results'}
+            </button>
+          ))}
         </div>
 
         {/* Shopping List */}
         {activeTab === 'list' && (
-          <div className="bg-white rounded-xl shadow-md overflow-hidden">
-            <div className="p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-800">Your Shopping List</h2>
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden animate-slide-up">
+            <div className="p-8">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">Your Shopping List</h2>
               {shoppingList.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-12 text-gray-500 text-lg">
                   Your list is empty. Try adding items by voice!
                 </div>
               ) : (
                 <ul className="divide-y divide-gray-100">
                   {shoppingList.map((item) => (
-                    <li key={item.id} className="py-3 flex justify-between items-center">
-                      <div>
-                        <span className="font-medium">{item.name}</span>
-                        <span className="text-sm text-gray-500 ml-2">({item.quantity})</span>
+                    <li key={item.id} className="py-4 flex justify-between items-center hover:bg-gray-50 transition-colors duration-200">
+                      <div className="flex items-center gap-3">
+                        <span className="font-medium text-gray-800">{item.name}</span>
+                        <span className="text-sm text-gray-500">({item.quantity})</span>
                         {item.category && (
-                          <span className="ml-2 px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
+                          <span className="px-3 py-1 text-xs rounded-full bg-indigo-100 text-indigo-800 font-medium">
                             {item.category}
                           </span>
                         )}
                       </div>
                       <button
                         onClick={() => deleteItem(item.id)}
-                        className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-colors"
+                        className="p-2 rounded-full text-red-500 hover:text-red-700 hover:bg-red-50 transition-colors duration-200"
                         aria-label="Delete item"
                       >
-                        🗑️
+                        <Trash2 className="w-5 h-5" />
                       </button>
                     </li>
                   ))}
@@ -259,25 +259,25 @@ export default function Home() {
 
         {/* Suggestions */}
         {activeTab === 'suggestions' && (
-          <div className="bg-white rounded-xl shadow-md overflow-hidden">
-            <div className="p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-800">Smart Suggestions</h2>
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden animate-slide-up">
+            <div className="p-8">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">Smart Suggestions</h2>
               {suggestions.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-12 text-gray-500 text-lg">
                   No suggestions available. Try adding some items first!
                 </div>
               ) : (
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {suggestions.map((item, idx) => (
-                    <li key={idx} className="border border-gray-200 rounded-lg p-3 hover:bg-gray-50 transition-colors">
+                    <li key={idx} className="border border-gray-200 rounded-xl p-4 hover:bg-indigo-50 transition-colors duration-200">
                       <div className="flex justify-between items-center">
-                        <span>{item}</span>
+                        <span className="text-gray-700 font-medium">{item}</span>
                         <button
                           onClick={() => addSuggestion(item)}
-                          className="text-green-600 hover:text-green-800 p-2 rounded-full hover:bg-green-50 transition-colors"
+                          className="p-2 rounded-full text-green-600 hover:text-green-800 hover:bg-green-50 transition-colors duration-200"
                           aria-label="Add to list"
                         >
-                          ➕
+                          <Plus className="w-5 h-5" />
                         </button>
                       </div>
                     </li>
@@ -290,37 +290,37 @@ export default function Home() {
 
         {/* Search Results */}
         {activeTab === 'search' && (
-          <div className="bg-white rounded-xl shadow-md overflow-hidden">
-            <div className="p-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-800">Product Search Results</h2>
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden animate-slide-up">
+            <div className="p-8">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">Product Search Results</h2>
               {searchResults.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-12 text-gray-500 text-lg">
                   No results found. Try a different search term.
                 </div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                    <thead className="bg-indigo-50">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Brand</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Product</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Brand</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Price</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="divide-y divide-gray-200">
                       {searchResults.map((product) => (
-                        <tr key={product.id}>
+                        <tr key={product.id} className="hover:bg-indigo-50 transition-colors duration-200">
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{product.name}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.brand}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹{product.price.toFixed(2)}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{product.brand}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">₹{product.price.toFixed(2)}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm">
                             <button
                               onClick={() => addSuggestion(product.name)}
-                              className="text-green-600 hover:text-green-800 p-1 rounded-full hover:bg-green-50 transition-colors"
+                              className="flex items-center gap-2 text-green-600 hover:text-green-800 p-2 rounded-full hover:bg-green-50 transition-colors duration-200"
                               aria-label="Add to list"
                             >
-                              ➕ Add
+                              <Plus className="w-5 h-5" /> Add
                             </button>
                           </td>
                         </tr>
@@ -334,10 +334,26 @@ export default function Home() {
         )}
 
         {/* Footer */}
-        <footer className="mt-12 text-center text-sm text-gray-500">
-          <p>Voice Shopping Assistant - Speak naturally to manage your shopping list</p>
+        <footer className="mt-12 text-center text-gray-500 text-sm">
+          <p>Voice Shopping Assistant - Powered by xAI</p>
         </footer>
       </div>
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fadeIn 0.6s ease-out;
+        }
+        .animate-slide-up {
+          animation: slideUp 0.6s ease-out;
+        }
+      `}</style>
     </div>
   )
 }
