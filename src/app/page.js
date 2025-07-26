@@ -62,7 +62,7 @@ export default function Home() {
 
   const processVoiceCommand = async (text) => {
     try {
-      const res = await fetch('/voice-command', {
+      const res = await fetch(process.env.NEXT_PUBLIC_BACK+'/voice-command', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, lang: language }),
@@ -84,7 +84,7 @@ export default function Home() {
 
   const searchProducts = async (text) => {
     try {
-      const res = await fetch('/search', {
+      const res = await fetch(process.env.NEXT_PUBLIC_BACK+'/search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, lang: language }),
@@ -104,14 +104,14 @@ export default function Home() {
   }
 
   const refreshShoppingList = async () => {
-    const res = await fetch('/list')
+    const res = await fetch(process.env.NEXT_PUBLIC_BACK+'/list')
     const items = await res.json()
     setShoppingList(items)
     setActiveTab('list')
   }
 
   const loadSuggestions = async () => {
-    const res = await fetch('/suggestions')
+    const res = await fetch(process.env.NEXT_PUBLIC_BACK+'/suggestions')
     const data = await res.json()
     setSuggestions([...data.seasonal_suggestions, ...data.frequently_bought])
   }
@@ -123,7 +123,7 @@ export default function Home() {
 
   const deleteItem = async (id) => {
     try {
-      const res = await fetch(`/item/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACK}/item/${id}`, {
         method: 'DELETE',
       })
       const data = await res.json()
@@ -141,7 +141,7 @@ export default function Home() {
 
   const addSuggestion = async (item) => {
     try {
-      const res = await fetch('/voice-command', {
+      const res = await fetch(process.env.NEXT_PUBLIC_BACK+'/voice-command', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: `add ${item}`, lang: language }),
